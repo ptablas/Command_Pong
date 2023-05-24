@@ -1,4 +1,4 @@
-# Acknowledgments
+### Description
 
 A simple Ping Pong that runs on command promt based on NVitanovic's "Simple Pong Game" Tutorial. 
 
