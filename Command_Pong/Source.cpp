@@ -5,6 +5,7 @@
 
 enum eDir { STOP = 0, LEFT = 1, UPLEFT = 2, DOWNLEFT = 3, RIGHT = 4, UPRIGHT = 5, DOWNRIGHT = 6 };
 unsigned int illusionTime = 25;
+HANDLE hOut;
 
 class cBall
 {
@@ -116,7 +117,7 @@ class cGameManager
 private:
 	int width, height;
 	int score1, score2;
-	char up1, down1, up2, down2;
+	int up1, down1, up2, down2, quit_key;
 	bool quit;
 	cBall* ball;
 	cPaddle* player1;
@@ -127,8 +128,9 @@ public:
 	{
 		srand((unsigned int)time(NULL));
 		quit = false;
-		up1 = 'w'; up2 = 'i';
-		down1 = 's'; down2 = 'k';
+		quit_key = 0x51;
+		up1 = 0x57; up2 = 0x49;
+		down1 = 0x53; down2 = 0x4B;
 		score1 = score2 = 0;
 		width = w; height = h;
 		ball = new cBall(w / 2, h / 2);
@@ -158,13 +160,52 @@ public:
 		player2->Reset();
 	}
 
+	void Paint_ASCII(int Ascii)
+	{
+		static uint8_t c_counter;
+		switch (Ascii)
+		{
+		case 'wall' :
+			{
+			c_counter++;
+			SetConsoleTextAttribute(hOut, c_counter % 64);
+			std::cout << "\xB2";
+			break;
+			}
+		case 'pad' :
+			{
+			SetConsoleTextAttribute(hOut, 500);
+			std::cout << "\xDB";
+			break;
+			}
+		case 'ball':
+			{
+			SetConsoleTextAttribute(hOut, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			std::cout << "O";
+			break;
+			}
+		case 'back':
+			{
+			SetConsoleTextAttribute(hOut, 0);
+			std::cout << " ";
+			break;
+			}
+		case 'scor':
+			{
+			SetConsoleTextAttribute(hOut, 5);
+			std::cout << "Score 1: " << score1 << "		      " << " Score 2: " << score2 << std::endl;
+			break;
+			}
+		}
+		
+	}
+
 	void Draw()
 	{
 		//system("cls");
 
 		for (int i = 0; i < width + 2; i++)
-			std::cout << "\xB2";
-		std::cout << std::endl;
+			Paint_ASCII('wall');
 
 		for (int i = 0; i < height; i++)
 		{
@@ -177,55 +218,54 @@ public:
 				int player1y = player1->getY();
 				int player2y = player2->getY();
 
+
+
 				if (j == 0)
-					std::cout << "\xB2";
+					Paint_ASCII('wall');
 
 				if (ballx == j && bally == i)
-					std::cout << "O"; //ball
+					Paint_ASCII('ball');
 
 				else if (player1x == j && player1y == i)
-					std::cout << "\xDB"; //player 1
+					Paint_ASCII('pad'); //player 1
 
 				else if (player2x == j && player2y == i)
-					std::cout << "\xDB"; //player2
+					Paint_ASCII('pad'); //player2
 
 				else if (player1x == j && player1y + 1 == i)
-					std::cout << "\xDB"; //player 1
+					Paint_ASCII('pad'); //player 1
 				else if (player1x == j && player1y + 2 == i)
-					std::cout << "\xDB"; //player 1
+					Paint_ASCII('pad'); //player 1
 				else if (player1x == j && player1y + 3 == i)
-					std::cout << "\xDB"; //player 1
+					Paint_ASCII('pad'); //player 1
 
 				else if (player2x == j && player2y + 1 == i)
-					std::cout << "\xDB"; //player 2
+					Paint_ASCII('pad'); //player 2
 				else if (player2x == j && player2y + 2 == i)
-					std::cout << "\xDB"; //player 2
+					Paint_ASCII('pad'); //player 2
 				else if (player2x == j && player2y + 3 == i)
-					std::cout << "\xDB"; //player 2
+					Paint_ASCII('pad'); //player 2
 
 
 				else
-					std::cout << " ";
+					Paint_ASCII('back');
 
 
 				if (j == width - 1)
-					std::cout << "\xB2";
+					Paint_ASCII('wall');
 			}
 			std::cout << std::endl;
 		}
 
 		for (int i = 0; i < width + 2; i++)
-			std::cout << "\xB2";
+		Paint_ASCII('wall');
 		std::cout << std::endl;
 
-		std::cout << "Score 1: " << score1 << "		      " << " Score 2: " << score2 << std::endl;
-
-
+		Paint_ASCII('scor');
 	}
 
 	void clearScreen() // Use Direct implementation of "cls" to clear screen without flickering!
 	{
-		HANDLE hOut;
 		COORD Position;
 
 		hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -251,30 +291,26 @@ public:
 		int player1y = player1->getY();
 		int player2y = player2->getY();
 
-		while(!keydown(VK_ESCAPE))
-		{
-			if (current == up1)
+			if (keydown(up1))
 				if (player1y > 0)
 					player1->moveUp();
-			if (current == up2)
+			if (keydown(up2))
 				if (player2y > 0)
 					player2->moveUp();
 
-			if (current == down1)
+			if (keydown(down1))
 				if (player1y + 4 < height)
 					player1->moveDown();
-			if (current == down2)
+			if (keydown(down2))
 				if (player2y + 4 < height)
 					player2->moveDown();
 
 			if (ball->getDirection() == STOP)
 				ball->randomDirection();
 
-			if (current == 'q')
+			if (keydown(quit_key))
 				quit = true;
 				illusionTime = 25;
-
-		}
 
 	}
 
