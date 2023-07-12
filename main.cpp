@@ -522,6 +522,7 @@ int main(int argc, char* args[])
 		{
 			printf("Failed to load media!\n");
 		}
+
 		else
 		{
 			//Main loop flag
@@ -529,6 +530,8 @@ int main(int argc, char* args[])
 
 			//Event handler
 			SDL_Event e;
+
+
 
 			//While application is running
 			while (!quit)
@@ -553,8 +556,43 @@ int main(int argc, char* args[])
 					SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 					SDL_RenderClear(gRenderer);
 
-					//Render text textures
+					/*/Render text textures			NO TEXTURES
 					gSceneTexture.render((gWindow.getWidth() - gSceneTexture.getWidth()) / 2, (gWindow.getHeight() - gSceneTexture.getHeight()) / 2);
+					*/
+
+					int padX = gWindow.getWidth() / 20;
+					int padY = gWindow.getHeight() * 2 / 5;
+					int padWidth = gWindow.getWidth() / 20;
+					int padHeight = gWindow.getHeight() / 5;
+
+					//Render LeftPad
+					SDL_Rect LeftPad = { padX, padY, padWidth, padHeight};
+					SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+					SDL_RenderFillRect(gRenderer, &LeftPad);
+
+					//Render RightPad
+
+					SDL_Rect RightPad = { padX * 18,  padY, padWidth, padHeight };
+					SDL_SetRenderDrawColor(gRenderer, 100, 0x00, 0x00, 0xFF);
+					SDL_RenderFillRect(gRenderer, &RightPad);
+
+					//Draw blue horizontal line
+					SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
+					SDL_RenderDrawLine(gRenderer, 0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2);
+
+					//Render green outlined quad
+					SDL_Rect outlineRect = { SCREEN_WIDTH / 6, SCREEN_HEIGHT / 6, SCREEN_WIDTH * 2 / 3, SCREEN_HEIGHT * 2 / 3 };
+					SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
+					SDL_RenderDrawRect(gRenderer, &outlineRect);
+
+
+
+					//Draw vertical line of yellow dots
+					SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0x00, 0xFF);
+					for (int i = 0; i < SCREEN_HEIGHT; i += 4)
+					{
+						SDL_RenderDrawPoint(gRenderer, SCREEN_WIDTH / 2, i);
+					}
 
 					//Update screen
 					SDL_RenderPresent(gRenderer);
