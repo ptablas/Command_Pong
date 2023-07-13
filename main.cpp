@@ -508,9 +508,30 @@ void close()
 	SDL_Quit();
 }
 
-
-void SDL_Circle_Bres(SDL_Renderer* renderer, int centreX, int centreY, int radius)
+struct Circle 
 {
+	int centreX;
+	int centreY;
+	int radius;
+
+	Circle() = default;
+
+	Circle(int centreX, int centreY, int radius)
+		: centreX(centreX), centreY(centreY), radius(radius)
+	{
+	}
+
+	bool operator==(const Circle& other) const
+	{
+		return false;
+	}
+};
+void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle)
+{
+	int centreX = circle.centreX;
+	int centreY = circle.centreY;
+	int radius = circle.radius;
+
 	int x = 0;
 	int y = radius;
 	int m = 2 - 2 * radius;
@@ -538,9 +559,12 @@ void SDL_Circle_Bres(SDL_Renderer* renderer, int centreX, int centreY, int radiu
 		++x;
 	}
 }
-
-void SDL_Circle_Filled(SDL_Renderer* renderer, int centreX, int centreY, int radius)
+void SDL_Circle_Filled(SDL_Renderer* renderer, Circle& circle)
 {
+	int centreX = circle.centreX;
+	int centreY = circle.centreY;
+	int radius = circle.radius;
+
 	for (int x = - radius; x < radius; x++)
 	{
 		int height = (int)std::sqrt(radius * radius - x * x);
@@ -643,9 +667,11 @@ int main(int argc, char* args[])
 						SDL_RenderDrawPoint(gRenderer, wWidth / 2, i);
 					}
 
-					SDL_Circle_Bres(gRenderer, wWidth / 2, wHeight / 2, wWidth / 6);
+					Circle pitchcentre(wWidth / 2, wHeight / 2, wWidth / 6);
+					Circle ball(wWidth / 2, wHeight / 2, wWidth / 80);
 
-					SDL_Circle_Filled(gRenderer, wWidth / 2, wHeight / 2, wWidth / 80);
+					SDL_Circle_Line(gRenderer, pitchcentre);
+					SDL_Circle_Filled(gRenderer, ball);
 
 
 					//Update screen
