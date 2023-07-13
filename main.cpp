@@ -508,8 +508,6 @@ void close()
 	SDL_Quit();
 }
 
-int j = 0;
-
 int main(int argc, char* args[])
 {
 	//Start up SDL and create window
@@ -538,8 +536,6 @@ int main(int argc, char* args[])
 			//While application is running
 			while (!quit)
 			{
-				j++;
-
 				//Handle events on queue
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -569,7 +565,7 @@ int main(int argc, char* args[])
 
 					int padX = wWidth / 20;
 					int padY = wHeight * 2 / 5;
-					int padWidth = wWidth / 20;
+					int padWidth = wWidth / 30;
 					int padHeight = wHeight / 5;
 
 					int wallX = padX / 3;
@@ -584,7 +580,7 @@ int main(int argc, char* args[])
 
 					//Render RightPad
 
-					SDL_Rect RightPad = { padX * 18,  padY, padWidth, padHeight };
+					SDL_Rect RightPad = { wWidth - padX - padWidth,  padY, padWidth, padHeight };
 					SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 					SDL_RenderFillRect(gRenderer, &RightPad);
 
@@ -598,13 +594,19 @@ int main(int argc, char* args[])
 					SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
 					SDL_RenderDrawRect(gRenderer, &outlineRect);
 
-
-
 					//Draw vertical line of yellow dots
 					SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
 					for (int i = 0; i < wHeight; i += 4)
 					{
 						SDL_RenderDrawPoint(gRenderer, wWidth / 2, i);
+					}
+
+					for (float angle = 0, colour = 0; angle < 2 * M_PI; angle += M_PI / 180, colour++ )
+					{
+						int radius = wWidth / 6;
+						int centreX = wWidth / 2;
+						int centreY = wHeight / 2;
+						SDL_RenderDrawPoint(gRenderer, cos(angle) * radius + centreX, sin(angle) * radius + centreY );
 					}
 
 					//Update screen
