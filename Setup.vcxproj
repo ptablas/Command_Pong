@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Codelib\SDL2-2.28.1\include;C:\Codelib\SDL2_image-2.6.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Codelib\SDL2-2.28.1\lib\x64;C:\Codelib\SDL2_image-2.6.3\lib\x64\optional;C:\Codelib\SDL2_image-2.6.3\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Codelib\SDL2-2.28.1\include;C:\Codelib\SDL2_image-2.6.3\include;C:\Codelib\SDL2_gfx-1.0.4 %281%29\SDL2_gfx-1.0.4\acinclude;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Codelib\SDL2-2.28.1\lib\x64;C:\Codelib\SDL2_image-2.6.3\lib\x64\optional;C:\Codelib\SDL2_image-2.6.3\lib\x64;C:\Codelib\SDL2_gfx-1.0.4 %281%29\SDL2_gfx-1.0.4;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

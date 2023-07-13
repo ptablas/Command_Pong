@@ -508,6 +508,37 @@ void close()
 	SDL_Quit();
 }
 
+
+void SDL_CircleBres(SDL_Renderer* renderer, int centreX, int centreY, int radius)
+{
+	int x = 0;
+	int y = radius;
+	int m = 2 - 2 * radius;
+
+	while (x <= y)
+	{
+		//  Each of the following renders an octant of the circle
+		SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
+		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
+		SDL_RenderDrawPoint(renderer, centreX - x, centreY - y);
+		SDL_RenderDrawPoint(renderer, centreX - x, centreY + y);
+		SDL_RenderDrawPoint(renderer, centreX + y, centreY - x);
+		SDL_RenderDrawPoint(renderer, centreX + y, centreY + x);
+		SDL_RenderDrawPoint(renderer, centreX - y, centreY - x);
+		SDL_RenderDrawPoint(renderer, centreX - y, centreY + x);
+
+
+		if (m > 0)
+		{
+			--y;
+			m = m + 4 * (x - y) + 10;
+		}
+		else
+			m = m + 4 * x + 6;
+		++x;
+	}
+}
+
 int main(int argc, char* args[])
 {
 	//Start up SDL and create window
@@ -601,13 +632,7 @@ int main(int argc, char* args[])
 						SDL_RenderDrawPoint(gRenderer, wWidth / 2, i);
 					}
 
-					for (float angle = 0, colour = 0; angle < 2 * M_PI; angle += M_PI / 180, colour++ )
-					{
-						int radius = wWidth / 6;
-						int centreX = wWidth / 2;
-						int centreY = wHeight / 2;
-						SDL_RenderDrawPoint(gRenderer, cos(angle) * radius + centreX, sin(angle) * radius + centreY );
-					}
+					SDL_CircleBres(gRenderer, wWidth / 2, wHeight / 2, wWidth / 6);
 
 					//Update screen
 					SDL_RenderPresent(gRenderer);

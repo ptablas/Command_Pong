@@ -1,5 +1,2 @@
 ﻿  main.cpp
-C:\Users\pablo\Documents\GitHub\Command_Pong\main.cpp(604,77): warning C4305: '+=': truncation from 'double' to 'float'
-C:\Users\pablo\Documents\GitHub\Command_Pong\main.cpp(610,89): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\pablo\Documents\GitHub\Command_Pong\main.cpp(610,58): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Setup.vcxproj -> C:\Users\pablo\Documents\GitHub\Command_Pong\x64\Debug\Setup.exe
