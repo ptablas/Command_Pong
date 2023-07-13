@@ -526,7 +526,7 @@ struct Circle
 		return false;
 	}
 };
-void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle)
+void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle, int f1, int f2)
 {
 	int centreX = circle.centreX;
 	int centreY = circle.centreY;
@@ -536,8 +536,11 @@ void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle)
 	int y = radius;
 	int m = 2 - 2 * radius;
 
+	int f = 3; // 1 = smooth
+
 	while (x <= y)
 	{
+
 		//  Each of the following renders an octant of the circle
 		SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
 		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
@@ -551,12 +554,12 @@ void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle)
 
 		if (m > 0)
 		{
-			--y;
+			y -= f1;
 			m = m + 4 * (x - y) + 10;
 		}
 		else
 			m = m + 4 * x + 6;
-		++x;
+		x += f2;
 	}
 }
 void SDL_Circle_Filled(SDL_Renderer* renderer, Circle& circle)
@@ -573,6 +576,9 @@ void SDL_Circle_Filled(SDL_Renderer* renderer, Circle& circle)
 		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
 	}
 }
+
+int i = 1;
+int j = 1;
 	
 int main(int argc, char* args[])
 {
@@ -597,11 +603,28 @@ int main(int argc, char* args[])
 			//Event handler
 			SDL_Event e;
 
-
+			int time = 0;
 
 			//While application is running
 			while (!quit)
 			{
+
+				time = (time + 1) % 4;
+				
+					if (time == 0)
+					{
+						if (i < 10)
+							i++;
+						else;
+
+						j++;
+					}
+
+				if (i > 10)
+					i = 1;
+				if (j > 7)
+					j = 1;
+
 				//Handle events on queue
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -670,7 +693,7 @@ int main(int argc, char* args[])
 					Circle pitchcentre(wWidth / 2, wHeight / 2, wWidth / 6);
 					Circle ball(wWidth / 2, wHeight / 2, wWidth / 80);
 
-					SDL_Circle_Line(gRenderer, pitchcentre);
+					SDL_Circle_Line(gRenderer, pitchcentre, i, j);
 					SDL_Circle_Filled(gRenderer, ball);
 
 
