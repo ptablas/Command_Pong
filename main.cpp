@@ -509,7 +509,7 @@ void close()
 }
 
 
-void SDL_CircleBres(SDL_Renderer* renderer, int centreX, int centreY, int radius)
+void SDL_Circle_Bres(SDL_Renderer* renderer, int centreX, int centreY, int radius)
 {
 	int x = 0;
 	int y = radius;
@@ -539,6 +539,17 @@ void SDL_CircleBres(SDL_Renderer* renderer, int centreX, int centreY, int radius
 	}
 }
 
+void SDL_Circle_Filled(SDL_Renderer* renderer, int centreX, int centreY, int radius)
+{
+	for (int x = - radius; x < radius; x++)
+	{
+		int height = (int)std::sqrt(radius * radius - x * x);
+
+		for (int y = -height; y < height; y++)
+		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
+	}
+}
+	
 int main(int argc, char* args[])
 {
 	//Start up SDL and create window
@@ -632,7 +643,10 @@ int main(int argc, char* args[])
 						SDL_RenderDrawPoint(gRenderer, wWidth / 2, i);
 					}
 
-					SDL_CircleBres(gRenderer, wWidth / 2, wHeight / 2, wWidth / 6);
+					SDL_Circle_Bres(gRenderer, wWidth / 2, wHeight / 2, wWidth / 6);
+
+					SDL_Circle_Filled(gRenderer, wWidth / 2, wHeight / 2, wWidth / 80);
+
 
 					//Update screen
 					SDL_RenderPresent(gRenderer);
@@ -646,3 +660,4 @@ int main(int argc, char* args[])
 
 	return 0;
 }
+
