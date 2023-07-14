@@ -7,6 +7,7 @@ and may not be redistributed without written permission.*/
 #include <stdio.h>
 #include <string>
 #include <sstream>
+#include "Circular.h"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -508,74 +509,7 @@ void close()
 	SDL_Quit();
 }
 
-struct Circle 
-{
-	int centreX;
-	int centreY;
-	int radius;
 
-	Circle() = default;
-
-	Circle(int centreX, int centreY, int radius)
-		: centreX(centreX), centreY(centreY), radius(radius)
-	{
-	}
-
-	bool operator==(const Circle& other) const
-	{
-		return false;
-	}
-};
-void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle, int f1, int f2)
-{
-	int centreX = circle.centreX;
-	int centreY = circle.centreY;
-	int radius = circle.radius;
-
-	int x = 0;
-	int y = radius;
-	int m = 2 - 2 * radius;
-
-	int f = 3; // 1 = smooth
-
-	while (x <= y)
-	{
-
-		//  Each of the following renders an octant of the circle
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
-		SDL_RenderDrawPoint(renderer, centreX - x, centreY - y);
-		SDL_RenderDrawPoint(renderer, centreX - x, centreY + y);
-		SDL_RenderDrawPoint(renderer, centreX + y, centreY - x);
-		SDL_RenderDrawPoint(renderer, centreX + y, centreY + x);
-		SDL_RenderDrawPoint(renderer, centreX - y, centreY - x);
-		SDL_RenderDrawPoint(renderer, centreX - y, centreY + x);
-
-
-		if (m > 0)
-		{
-			y -= f1;
-			m = m + 4 * (x - y) + 10;
-		}
-		else
-			m = m + 4 * x + 6;
-		x += f2;
-	}
-}
-void SDL_Circle_Filled(SDL_Renderer* renderer, Circle& circle)
-{
-	int centreX = circle.centreX;
-	int centreY = circle.centreY;
-	int radius = circle.radius;
-
-	for (int x = - radius; x < radius; x++)
-	{
-		int height = (int)std::sqrt(radius * radius - x * x);
-
-		for (int y = -height; y < height; y++)
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
-	}
-}
 
 int i = 1;
 int j = 1;
@@ -693,7 +627,7 @@ int main(int argc, char* args[])
 					Circle pitchcentre(wWidth / 2, wHeight / 2, wWidth / 6);
 					Circle ball(wWidth / 2, wHeight / 2, wWidth / 80);
 
-					SDL_Circle_Line(gRenderer, pitchcentre, i, j);
+					SDL_Circle_Morph(gRenderer, pitchcentre, i, j);
 					SDL_Circle_Filled(gRenderer, ball);
 
 
