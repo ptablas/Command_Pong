@@ -624,12 +624,11 @@ int main(int argc, char* args[])
 						SDL_RenderDrawPoint(gRenderer, wWidth / 2, i);
 					}
 
-					Circle pitchcentre(wWidth / 2, wHeight / 2, wWidth / 6);
+					Bresenham pitchcentre(wWidth / 2, wHeight / 2, wWidth / 6);
 					Circle ball(wWidth / 2, wHeight / 2, wWidth / 80);
 
-					SDL_Circle_Morph(gRenderer, pitchcentre, i, j);
-					SDL_Circle_Filled(gRenderer, ball);
-
+					pitchcentre.Polyg(gRenderer, 4, 3);
+					ball.Fill(gRenderer);
 
 					//Update screen
 					SDL_RenderPresent(gRenderer);

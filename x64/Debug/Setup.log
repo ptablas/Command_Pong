@@ -1,2 +1,4 @@
 ﻿  main.cpp
-  Setup.vcxproj -> C:\Users\pablo\Documents\GitHub\Command_Pong\x64\Debug\Setup.exe
+main.obj : error LNK2019: unresolved external symbol "public: __cdecl Circle::Circle(int,int,int)" (??0Circle@@QEAA@HHH@Z) referenced in function SDL_main
+main.obj : error LNK2019: unresolved external symbol "public: __cdecl Bresenham::Bresenham(int,int,int)" (??0Bresenham@@QEAA@HHH@Z) referenced in function SDL_main
+C:\Users\pablo\Documents\GitHub\Command_Pong\x64\Debug\Setup.exe : fatal error LNK1120: 2 unresolved externals

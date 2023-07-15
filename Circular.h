@@ -2,50 +2,57 @@
 
 #include <SDL.h>
 
-struct Circle
+class Circle
 {
-	int centreX;
-	int centreY;
-	int radius;
+public:
 
-	Circle() = default;
+	Circle(int mCentreX, int mCentreY, int mRadius);
 
-	Circle(int centreX, int centreY, int radius)
-		: centreX(centreX), centreY(centreY), radius(radius)
-	{
-	}
+	// other inherited class
+	void Fill(SDL_Renderer* renderer);
 
-	bool operator==(const Circle& other) const
-	{
-		return false;
-	}
+protected:
+	int mCentreX, mCentreY, mRadius;
 };
 
-void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle)
+
+
+class Bresenham : Circle // Circle perimeter drawing
 {
-	int centreX = circle.centreX;
-	int centreY = circle.centreY;
-	int radius = circle.radius;
+public:
 
+	Bresenham(int mCentreX, int mCentreY, int mRadius);
+
+	void Perim(SDL_Renderer* renderer);
+	void Polyg(SDL_Renderer* renderer, int fact1, int fact2);
+	void Morph(SDL_Renderer* renderer, int lim1, int lim2);
+
+private:
 	int x = 0;
-	int y = radius;
-	int m = 2 - 2 * radius;
+	int y = mRadius;
+	int m = 2 - 2 * mRadius;
 
-	int f = 3; // 1 = smooth
+	void mOctan_Render(SDL_Renderer* renderer);
+};
 
+void Bresenham::mOctan_Render(SDL_Renderer* renderer)
+{
+	//  Each of the following renders an octant of the circle
+	SDL_RenderDrawPoint(renderer, mCentreX + x, mCentreY - y);
+	SDL_RenderDrawPoint(renderer, mCentreX + x, mCentreY + y);
+	SDL_RenderDrawPoint(renderer, mCentreX - x, mCentreY - y);
+	SDL_RenderDrawPoint(renderer, mCentreX - x, mCentreY + y);
+	SDL_RenderDrawPoint(renderer, mCentreX + y, mCentreY - x);
+	SDL_RenderDrawPoint(renderer, mCentreX + y, mCentreY + x);
+	SDL_RenderDrawPoint(renderer, mCentreX - y, mCentreY - x);
+	SDL_RenderDrawPoint(renderer, mCentreX - y, mCentreY + x);
+}
+
+void Bresenham::Perim(SDL_Renderer* renderer)
+{
 	while (x <= y)
 	{
-
-		//  Each of the following renders an octant of the circle
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
-		SDL_RenderDrawPoint(renderer, centreX - x, centreY - y);
-		SDL_RenderDrawPoint(renderer, centreX - x, centreY + y);
-		SDL_RenderDrawPoint(renderer, centreX + y, centreY - x);
-		SDL_RenderDrawPoint(renderer, centreX + y, centreY + x);
-		SDL_RenderDrawPoint(renderer, centreX - y, centreY - x);
-		SDL_RenderDrawPoint(renderer, centreX - y, centreY + x);
-
+		mOctan_Render(renderer);
 
 		if (m > 0)
 		{
@@ -58,31 +65,11 @@ void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle)
 	}
 }
 
-void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle, int fact1, int fact2)
+void Bresenham::Polyg(SDL_Renderer* renderer, int fact1, int fact2)
 {
-	int centreX = circle.centreX;
-	int centreY = circle.centreY;
-	int radius = circle.radius;
-
-	int x = 0;
-	int y = radius;
-	int m = 2 - 2 * radius;
-
-	int f = 3; // 1 = smooth
-
 	while (x <= y)
 	{
-
-		//  Each of the following renders an octant of the circle
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
-		SDL_RenderDrawPoint(renderer, centreX - x, centreY - y);
-		SDL_RenderDrawPoint(renderer, centreX - x, centreY + y);
-		SDL_RenderDrawPoint(renderer, centreX + y, centreY - x);
-		SDL_RenderDrawPoint(renderer, centreX + y, centreY + x);
-		SDL_RenderDrawPoint(renderer, centreX - y, centreY - x);
-		SDL_RenderDrawPoint(renderer, centreX - y, centreY + x);
-
+		mOctan_Render(renderer);
 
 		if (m > 0)
 		{
@@ -95,37 +82,17 @@ void SDL_Circle_Line(SDL_Renderer* renderer, Circle& circle, int fact1, int fact
 	}
 }
 
-void SDL_Circle_Morph(SDL_Renderer* renderer, Circle& circle, int lim_fact1, int lim_fact2)
+void Bresenham::Morph(SDL_Renderer* renderer, int lim_fact1, int lim_fact2)
 {
-	int centreX = circle.centreX;
-	int centreY = circle.centreY;
-	int radius = circle.radius;
+	bool fact1_dir = true;	// 1 = up
+	bool fact2_dir = true;   // 0 = down
 
-	bool fact1_dir = 1;	// 1 = up
-	bool fact2_dir = 1; // 0 = down
-
-	int inc_fact1 = 1;
-	int inc_fact2 = 1;
-
-	int x = 0;
-	int y = radius;
-	int m = 2 - 2 * radius;
-
-	int f = 3; // 1 = smooth
+	static int inc_fact1 = 1; // this should be defined outside
+	static int inc_fact2 = 1;
 
 	while (x <= y)
 	{
-
-		//  Each of the following renders an octant of the circle
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
-		SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
-		SDL_RenderDrawPoint(renderer, centreX - x, centreY - y);
-		SDL_RenderDrawPoint(renderer, centreX - x, centreY + y);
-		SDL_RenderDrawPoint(renderer, centreX + y, centreY - x);
-		SDL_RenderDrawPoint(renderer, centreX + y, centreY + x);
-		SDL_RenderDrawPoint(renderer, centreX - y, centreY - x);
-		SDL_RenderDrawPoint(renderer, centreX - y, centreY + x);
-
+		mOctan_Render(renderer);
 
 		if (m > 0)
 		{
@@ -137,38 +104,30 @@ void SDL_Circle_Morph(SDL_Renderer* renderer, Circle& circle, int lim_fact1, int
 		x += inc_fact2;
 	}
 
-	if (radius == y)
-		fact1_dir = 1;
-	if (y == lim_fact1)
-		fact1_dir = 0;
+	if (inc_fact1 == 1)
+		fact1_dir = true;
+	if (inc_fact1 == lim_fact1)
+		fact1_dir = false;
 
-	if (fact1_dir)
-		inc_fact1++;
-	else
-		inc_fact1--;
+	fact1_dir ? inc_fact1++ : inc_fact1--;
 
-	if (x == 0)
-		fact2_dir = 1;
-	if (x == lim_fact1)
-		fact2_dir = 0;
+	if (inc_fact2 == 1)
+		fact2_dir = true;
+	if (inc_fact2 == lim_fact2)	
+		fact2_dir = false;
 
-	if (fact2_dir)
-		inc_fact2++;
-	else
-		inc_fact2--;
+	fact2_dir ? inc_fact2++ : inc_fact2--;
 }
 
-void SDL_Circle_Filled(SDL_Renderer* renderer, Circle& circle)
+void Circle::Fill(SDL_Renderer* renderer)
 {
-	int centreX = circle.centreX;
-	int centreY = circle.centreY;
-	int radius = circle.radius;
-
-	for (int x = -radius; x < radius; x++)
+	for (int x = -mRadius; x < mRadius; x++)
 	{
-		int height = (int)std::sqrt(radius * radius - x * x);
+		int height = (int)std::sqrt(mRadius * mRadius - x * x);
 
 		for (int y = -height; y < height; y++)
-			SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
+			SDL_RenderDrawPoint(renderer, mCentreX + x, mCentreY + y);
 	}
 }
+
+// THIS NEEDS TO BE A PROPER CLASS
