@@ -633,7 +633,7 @@ int main(int argc, char* args[])
 						SDL_RenderDrawPoint(gRenderer, wWidth / 2, i);
 					}
 
-					pitchcentre.Morph(gRenderer, 3, 1, 16, 20);
+					pitchcentre.Morph(gRenderer, 1, 90, 1, 3);
 					ball.Fill(gRenderer);
 
 					//Update screen

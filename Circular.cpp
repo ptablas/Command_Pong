@@ -59,13 +59,29 @@ void Bresenham::Polyg(SDL_Renderer* renderer, int fact1, int fact2)
 	}
 }
 
-void Bresenham::Morph(SDL_Renderer* renderer, int min_fact1, int min_fact2, int lim_fact1, int lim_fact2)
+void Bresenham::Morph(SDL_Renderer* renderer, int strt1, int end1, int strt2, int end2)
 {
 
 	if (isFirstCall)
 	{
-		inc_fact1 = min_fact1;
-		inc_fact2 = min_fact2;
+		fact1 = strt1;
+		fact2 = strt2;
+
+		if (strt1 > end1)
+			dir1 = false;
+
+		if (strt2 > end2)
+			dir2 = false;
+
+		//if (strt1 == end1 && strt2 == end2) // if they are both the same it returns 0 + create flag that it should not add anything
+			//throw std::runtime_error("If limits are equal, use non-morphing Polyg function instead");
+
+		if (strt1 == end1)
+			morph_not1 = true;
+
+		if (strt2 == end2)
+			morph_not2 = true;
+
 		isFirstCall = false;
 	}
 
@@ -75,28 +91,29 @@ void Bresenham::Morph(SDL_Renderer* renderer, int min_fact1, int min_fact2, int 
 
 		if (m > 0)
 		{
-			y -= inc_fact1;
+			y -= fact1;
 			m = m + 4 * (x - y) + 10;
 		}
 		else
 			m = m + 4 * x + 6;
-		x += inc_fact2;
+		x += fact2;
 	}
 
-
 	// Update Factors
-	inc_fact1 += (fact1_dir ? 1 : -1);
-	inc_fact2 += (fact2_dir ? 1 : -1);
+	if (!morph_not1)
+	fact1 += (dir1 ? 1 : -1);
+
+	if (!morph_not2)
+	fact2 += (dir2 ? 1 : -1);
 
 	// Check if factors reach limits and change direction
-	if (inc_fact1 == min_fact1 || inc_fact1 == lim_fact1)
-		fact1_dir = !fact1_dir;
+	if (fact1 == strt1 || fact1 == end1)
+		dir1 = !dir1;
 
-	if (inc_fact2 == min_fact2 || inc_fact2 == lim_fact2)
-		fact2_dir = !fact2_dir;
+	if (fact2 == strt2 || fact2 == end2)
+		dir2 = !dir2;
 	
 }
 
-bool Bresenham::isFirstCall = true, Bresenham::fact1_dir = true, Bresenham::fact2_dir = true;
-
-int Bresenham::inc_fact1 = 1, Bresenham::inc_fact2 = 1;
+bool Bresenham::isFirstCall = true, Bresenham::dir1 = true, Bresenham::dir2 = true, Bresenham::morph_not1 = false, Bresenham::morph_not2 = false;
+int Bresenham::fact1, Bresenham::fact2;

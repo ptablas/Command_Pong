@@ -36,16 +36,15 @@ public:
 
 	void Perim(SDL_Renderer* renderer);
 	void Polyg(SDL_Renderer* renderer, int fact1, int fact2);
-	void Morph(SDL_Renderer* renderer, int inc_fact1, int inc_fact2, int lim1, int lim2);
+	void Morph(SDL_Renderer* renderer, int strt1, int end1, int strt2, int end2);
 
 private:
 	int x = 0;
 	int y = mRadius;
 	int m = 2 - 2 * mRadius;
-
-	static bool fact1_dir, fact2_dir, isFirstCall;
-	static int inc_fact1;
-	static int inc_fact2;
+	
+	static int fact1, fact2;
+	static bool morph_not1, morph_not2, dir1, dir2, isFirstCall;
 
 	void mOctan_Render(SDL_Renderer* renderer);
 
