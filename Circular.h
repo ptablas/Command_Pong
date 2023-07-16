@@ -42,9 +42,8 @@ private:
 	int x = 0;
 	int y = mRadius;
 	int m = 2 - 2 * mRadius;
-	bool fact1_dir = true, fact2_dir = true;
 
-	static bool isFirstCall;
+	static bool fact1_dir, fact2_dir, isFirstCall;
 	static int inc_fact1;
 	static int inc_fact2;
 

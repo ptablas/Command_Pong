@@ -83,24 +83,20 @@ void Bresenham::Morph(SDL_Renderer* renderer, int min_fact1, int min_fact2, int 
 		x += inc_fact2;
 	}
 
+
+	// Update Factors
 	inc_fact1 += (fact1_dir ? 1 : -1);
 	inc_fact2 += (fact2_dir ? 1 : -1);
 
-	// Check if inc_fact1 reaches the limits and adjust the direction accordingly
+	// Check if factors reach limits and change direction
 	if (inc_fact1 == min_fact1 || inc_fact1 == lim_fact1)
 		fact1_dir = !fact1_dir;
 
-	// Update inc_fact1 based on the direction
-	
-
-	// Check if inc_fact2 reaches the limits and adjust the direction accordingly
 	if (inc_fact2 == min_fact2 || inc_fact2 == lim_fact2)
 		fact2_dir = !fact2_dir;
-
-	// Update inc_fact2 based on the direction
 	
 }
 
-bool Bresenham::isFirstCall = true;
-int Bresenham::inc_fact1 = 1;
-int Bresenham::inc_fact2 = 1;
+bool Bresenham::isFirstCall = true, Bresenham::fact1_dir = true, Bresenham::fact2_dir = true;
+
+int Bresenham::inc_fact1 = 1, Bresenham::inc_fact2 = 1;
