@@ -572,6 +572,26 @@ int main(int argc, char* args[])
 					gWindow.handleEvent(e);
 				}
 
+				int wHeight = gWindow.getHeight();
+				int wWidth = gWindow.getWidth();
+
+				int padX = wWidth / 20;
+				int padY = wHeight * 2 / 5;
+				int padWidth = wWidth / 30;
+				int padHeight = wHeight / 5;
+
+				int wallX = padX / 3;
+				int wallY = wHeight / 20 / 3;
+				int wallW = wWidth * 19 / 20 + (padX / 3);
+				int wallH = wHeight * 19 / 20 + (wHeight / 20 / 3);
+
+				Bresenham pitchcentre(wWidth / 2, wHeight / 2, wWidth / 6);
+				Circle ball(wWidth / 2, wHeight / 2, wWidth / 80);
+
+				//WE NEED A PREPARE FUNCTION -> INITIALIZES AND SETS IsitFirst  
+				//AND A PAINT FUNCTION  -> DEFINES SIZES
+
+
 				//Only draw when not minimized
 				if (!gWindow.isMinimized())
 				{
@@ -583,18 +603,7 @@ int main(int argc, char* args[])
 					gSceneTexture.render((gWindow.getWidth() - gSceneTexture.getWidth()) / 2, (gWindow.getHeight() - gSceneTexture.getHeight()) / 2);
 					*/
 
-					int wHeight = gWindow.getHeight();
-					int wWidth = gWindow.getWidth();
 
-					int padX = wWidth / 20;
-					int padY = wHeight * 2 / 5;
-					int padWidth = wWidth / 30;
-					int padHeight = wHeight / 5;
-
-					int wallX = padX / 3;
-					int wallY = wHeight / 20 / 3;
-					int wallW = wWidth * 19 / 20 + (padX / 3);
-					int wallH = wHeight * 19 / 20 + (wHeight / 20 / 3);
 
 					//Render LeftPad
 					SDL_Rect LeftPad = { padX, padY, padWidth, padHeight};
@@ -624,10 +633,7 @@ int main(int argc, char* args[])
 						SDL_RenderDrawPoint(gRenderer, wWidth / 2, i);
 					}
 
-					Bresenham pitchcentre(wWidth / 2, wHeight / 2, wWidth / 6);
-					Circle ball(wWidth / 2, wHeight / 2, wWidth / 80);
-
-					pitchcentre.Polyg(gRenderer, 4, 3);
+					pitchcentre.Morph(gRenderer, 3, 1, 16, 20);
 					ball.Fill(gRenderer);
 
 					//Update screen

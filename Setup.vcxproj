@@ -135,6 +135,7 @@
     <Text Include="..\SDL2\01_hello_SDL\readme.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Circular.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
